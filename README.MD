@@ -5,7 +5,7 @@ under the hood it uses windows `ReadProcessMemory` API
 
 ![](./mcp-read-process-memory.png)
 
-# Install
+## Install
 
 ```shell
 
@@ -13,7 +13,7 @@ npm install -g mcp-read-process-memory
 
 ```
 
-# Config MCP Host
+## Config MCP Host
 
 Claude
 
@@ -31,6 +31,6 @@ Claude
 }
 ```
 
-# Credits
+## Credits
 
 Inspired by https://github.com/mrexodia/ida-pro-mcp
