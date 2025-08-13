@@ -1,0 +1,6 @@
+[submodule "windows/cpp-httplib"]
+	path = windows/cpp-httplib
+	url = https://github.com/yhirose/cpp-httplib.git
+[submodule "windows/nlohmann-json"]
+	path = windows/nlohmann-json
+	url = https://github.com/nlohmann/json.git

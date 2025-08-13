@@ -1,0 +1,10 @@
+{
+	"files.associations": {
+		"*.page": "javascriptreact",
+		"*.dev": "dockerfile",
+		"*.flex": "lex",
+		"*.usf": "hlsl",
+		"*.ush": "hlsl",
+		"cstdint": "cpp"
+	}
+}
