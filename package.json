@@ -1,4 +1,6 @@
 {
+  "name": "mcp-read-process-memory",
+  "version": "1.0.0",
   "bin": {
     "mcp-read-process-memory": "./build/index.js"
   },
