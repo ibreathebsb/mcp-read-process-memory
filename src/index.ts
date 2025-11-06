@@ -84,7 +84,7 @@ server.tool(
       } else if (typeof res.data === 'string') {
         resultText = res.data;
       } else if (Array.isArray(res.data)) {
-        resultText = res.data.map(byte => byte.toString(16).padStart(2, '0')).join(' ');
+        resultText = JSON.stringify(res.data);
       } else {
         resultText = "failed to parse response data";
       }
