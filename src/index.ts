@@ -79,12 +79,14 @@ server.tool(
 
     if (res && res.success) {
       let resultText: string;
-      if (typeof res.data === 'number') {
+      if (type === 'utf16' && Array.isArray(res.data)) {
+        resultText = String.fromCodePoint(...res.data);
+      } else if (typeof res.data === 'number') {
         resultText = "0x" + res.data.toString(16);
       } else if (typeof res.data === 'string') {
         resultText = res.data;
       } else if (Array.isArray(res.data)) {
-        resultText = JSON.stringify(res.data);
+        resultText = res.data.map(byte => byte.toString(16).padStart(2, '0')).join(' ');
       } else {
         resultText = "failed to parse response data";
       }

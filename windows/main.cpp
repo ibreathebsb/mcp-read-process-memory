@@ -45,7 +45,13 @@ int main() {
                  } else if (type == "utf16") {
                     std::wstring value;
                     success = pmm.Read(processId, address, value);
-                    if (success) result_data = value;
+                    if (success) {
+                        std::vector<int> charCodes;
+                        for (wchar_t wc : value) {
+                            charCodes.push_back(static_cast<int>(wc));
+                        }
+                        result_data = charCodes;
+                    }
                  }
 
                  res.set_content(json{{"data", result_data}, {"success", success}}.dump(), "application/json");
