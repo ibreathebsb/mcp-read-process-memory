@@ -22,14 +22,19 @@ server.tool(
       .regex(/^0[xX][0-9a-fA-F]+$/)
       .describe("The target memory address in HEXADECIMAL format"),
     type: z
-      .enum(["uint8", "uint16", "uint32", "uint64"])
-      .describe("The size of memory to read"),
+      .enum(["uint8", "uint16", "uint32", "uint64", "bytes", "utf16"])
+      .describe("The type of memory to read"),
     processId: z
       .number()
       .positive()
       .describe("The ID of the process to read memory from"),
+    size: z
+      .number()
+      .positive()
+      .optional()
+      .describe("The number of bytes to read (only for type 'bytes')"),
   },
-  async ({ address, type, processId }) => {
+  async ({ address, type, processId, size }) => {
     const actualAddress = parseInt(address, 0);
     if (isNaN(actualAddress)) {
       return {
@@ -41,21 +46,53 @@ server.tool(
         ],
       };
     }
+
+    const payload: {
+      address: number;
+      type: string;
+      processId: number;
+      size?: number;
+    } = { address: actualAddress, type, processId };
+
+    if (type === "bytes") {
+      if (!size || size <= 0) {
+        return {
+          content: [
+            {
+              type: "text",
+              text: "A positive 'size' is required for type 'bytes'",
+            },
+          ],
+        };
+      }
+      payload.size = size;
+    }
+
     const data = await fetch(`http://127.0.0.1:20258/`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ address: actualAddress, type, processId }),
+      body: JSON.stringify(payload),
     });
     const res = await data.json();
 
     if (res && res.success) {
+      let resultText: string;
+      if (typeof res.data === 'number') {
+        resultText = "0x" + res.data.toString(16);
+      } else if (typeof res.data === 'string') {
+        resultText = res.data;
+      } else if (Array.isArray(res.data)) {
+        resultText = res.data.map(byte => byte.toString(16).padStart(2, '0')).join(' ');
+      } else {
+        resultText = "failed to parse response data";
+      }
       return {
         content: [
           {
             type: "text",
-            text: "0x" + res.data.toString(16),
+            text: resultText,
           },
         ],
       };
