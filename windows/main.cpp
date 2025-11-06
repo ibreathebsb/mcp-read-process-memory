@@ -45,16 +45,7 @@ int main() {
                  } else if (type == "utf16") {
                     std::wstring value;
                     success = pmm.Read(processId, address, value);
-                    if (success) {
-                        if (!value.empty()) {
-                            int size_needed = WideCharToMultiByte(CP_UTF8, 0, &value[0], (int)value.size(), NULL, 0, NULL, NULL);
-                            std::string strTo(size_needed, 0);
-                            WideCharToMultiByte(CP_UTF8, 0, &value[0], (int)value.size(), &strTo[0], size_needed, NULL, NULL);
-                            result_data = strTo;
-                        } else {
-                            result_data = "";
-                        }
-                    }
+                    if (success) result_data = value;
                  }
 
                  res.set_content(json{{"data", result_data}, {"success", success}}.dump(), "application/json");
